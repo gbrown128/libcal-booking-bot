@@ -26,6 +26,13 @@ room_src = [
     {"room":"C", "index":2, "min_cap":2, "max_cap":6, "preference":3}
 ]
 
+""" Maximum index value
+
+This may well be larger than the maximum room index. Identified by how the
+timestamp rolls over from one day to the next.
+"""
+max_index = 4
+
 """ URL of the process_roombooking.php file """
 process_url = "http://libcal.example.org/process_roombooking.php"
 
@@ -40,3 +47,4 @@ session_name = "My Booking"
 
 """ Calendar GID to use """
 gid = 0000
+
