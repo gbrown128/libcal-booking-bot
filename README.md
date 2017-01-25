@@ -8,8 +8,8 @@ in the future though!
 
 # How LibCal Works
 
-The core of LibCal is the `process_booking.php` file. Obtaining booking 
-availabilities and placing bookings is done by POST requests to this file.
+The core of LibCal is the `process_roombookings.php` file. Obtaining booking 
+availabilities and placing bookings is done by GET requests to this file.
 
 There are three request types I am currently aware of. The request type is set 
 by the `m` field in the request.
