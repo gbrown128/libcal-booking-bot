@@ -9,6 +9,52 @@ import re
 # Local settings file.
 import settings
 
+def write_success_message(booking_link, booking):
+    # Regex magic pulls out details about the booking made.
+    booking_info = re.search(
+        "(Room \w{2,4}) .*, (\d{2}:\d{2}.+?), (.*)",
+        booking_link['title']
+    )
+
+    # Nice message for the status notifier.
+    nice_message = (
+        "I've booked "
+        + booking_info.group(1)
+        + " for you, from "
+        + booking_info.group(2)
+        + " on "
+        + booking_info.group(3)
+        + "\n"
+    )
+
+    # Write the message to file.
+    with open('status', 'a') as logfile:
+        logfile.write(nice_message)
+
+def write_failure_message(booking_link, booking):
+    # Regex magic pulls out details about the booking made.
+    booking_info = re.search(
+        "(Room \w{2,4}) .*, (\d{2}:\d{2}.+?), (.*)",
+        booking_link['title']
+    )
+
+    # Nice message for the status notifier.
+    nice_message = (
+        "I tried to book "
+        + booking_info.group(1)
+        + " for you, from "
+        + booking_info.group(2)
+        + " on "
+        + booking_info.group(3)
+        + ". Unfortunatley it failed. Response was: ```"
+        + booking.content.decode()
+        + "```\n"
+    )
+
+    # Write the message to file.
+    with open('status', 'a') as logfile:
+        logfile.write(nice_message)
+
 def make_booking(time):
     # Get the calendar data for the day to make the booking.
     caldata = get_caldata(time)
@@ -18,22 +64,23 @@ def make_booking(time):
     # Sort rooms by preference.
     sorted_rooms = sorted(settings.room_src, key=lambda k: k['preference'])
 
-    booking = -1
+    booking_sid = -1
 
     # Search for available bookings.
     for room in sorted_rooms:
         print(room['index'])
         target_booking = epoch + (23*room['index'] + time.hour)
-        if(caldata.find('a', id=target_booking)):
-            booking = target_booking
+        booking_link = caldata.find('a', id=target_booking)
+        if(booking_link):
+            booking_sid = target_booking
             break
 
-    if(booking == -1):
+    if(booking_sid == -1):
         return 1
 
     # Prepare the form data for the booking.
     booking_payload = {
-        'sid':booking,
+        'sid':booking_sid,
         'tc':"done",
         'gid':settings.gid,
         'name':settings.name,
@@ -47,13 +94,18 @@ def make_booking(time):
 
     # Make the POST request with the form data.
     # Requires Referer to go through properly.
+
     booking = requests.post(
         request_url,
         data=booking_payload,
         headers={'Referer': settings.referrer_url}
     )
-    # TEMP: Print the response.
-    print(booking.content)
+
+    if booking.content == "0":
+        # Success
+        write_success_message(booking_link, booking)
+    else:
+        write_failure_message(booking_link, booking)
 
 def get_caldata(date):
     # Payload for calendar data request.
@@ -113,8 +165,7 @@ def get_epoch(caldata):
     return(day_epoch)
 
 def main():
-#    time = datetime.datetime(2017,2,3,16)
-    time = datetime.datetime(2017,1,31,0)
+    time = datetime.datetime(2017,2,10,16)
     make_booking(time)
 
 if __name__ == "__main__":

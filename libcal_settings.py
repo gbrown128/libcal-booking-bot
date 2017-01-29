@@ -37,7 +37,7 @@ max_index = 4
 process_url = "http://libcal.example.org/process_roombookings.php"
 
 """ URL of the user interface for booking """
-referer_url = "http://libcal.example.org/booking/"
+referrer_url = "http://libcal.example.org/booking/"
 
 """ Name to use when placing bookings """
 name = "My Name"
@@ -50,11 +50,3 @@ session_name = "My Booking"
 
 """ Calendar GID to use """
 gid = 0000
-
-""" Epoch for most hours. """
-
-""" Epoch time - full ISO8601 datestamp for the start time. """
-epoch_time = "2017-01-01T00:00:00+0000"
-
-""" Epoch SID - the SID at the epoch_time. """
-epoch_sid = 123456789
