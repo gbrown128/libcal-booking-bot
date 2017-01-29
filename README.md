@@ -41,7 +41,11 @@ calendar body as a table of hyperlinks to sessions.
 
 # Session Identifiers
 
-Session identifiers seem to be mostly sane, but I haven't quite figured them out yet!
+Session identifiers seem to be mostly sane, but I haven't quite figured them 
+out yet!
+
+*For now, I'm just getting the day's epoch from the day's calendar. This 
+information may come in useful for future exploration though!*
 
 At Southampton, the library rooms are available for booking 24 hours a day, 7 
 days a week. Each booking session is 1 hour long. Things may well be different 
@@ -62,6 +66,9 @@ For example, room 1 at 00:00 has a SID of 157260320, and the same room at
 
 The next day, room 1 at 00:00 continues the sequence where the last room at 
 22:00 left off.
+
+At the month boundary from 17/01 to 17/02, the SID jumped forward 449 counts. 
+I don't know why yet!
 
 The 23:00 SIDs are seemingly a somewhat separate sequence, with an offset 
 epoch.
