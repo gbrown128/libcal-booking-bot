@@ -36,6 +36,9 @@ max_index = 4
 """ URL of the process_roombooking.php file """
 process_url = "http://libcal.example.org/process_roombookings.php"
 
+""" URL of the user interface for booking """
+referer_url = "http://libcal.example.org/booking/"
+
 """ Name to use when placing bookings """
 name = "My Name"
 
